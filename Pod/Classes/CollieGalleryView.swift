@@ -226,15 +226,24 @@ internal class CollieGalleryView: UIView, UIScrollViewDelegate {
                                                         queue: mainQueue,
                                                         completionHandler:
                     { [weak self] response, data, error in
-                    if error == nil {
-                        let image = UIImage(data: data!)!
-                        
+                    if error == nil,
+                        let data = data,
+                        let image = UIImage(data: data) {
                         DispatchQueue.main.async(execute: {
                             self?.imageView.image = image
                             self?.updateImageViewSize()
                             
                             self?.activityIndicator.stopAnimating()
                         })
+                    } else {
+                        DispatchQueue.main.async(execute: {
+                            if #available(iOS 13.0, *) {
+                                self?.imageView.image = UIImage(systemName: "icloud.slash")?.withTintColor(.white)
+                                self?.updateImageViewSize()
+                            }
+                            self?.activityIndicator.stopAnimating()
+                        })
+                        print("loadImage failed url:\(url)")
                     }
                 })
             }

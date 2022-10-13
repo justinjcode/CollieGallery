@@ -285,9 +285,9 @@ open class CollieGallery: UIViewController, UIScrollViewDelegate, CollieGalleryV
         }
         
         let avaiableSize = getInitialAvaiableSize()
-        let closeButtonFrame = getActionButtonFrame(avaiableSize)
+        let actionButtonFrame = getActionButtonFrame(avaiableSize)
         
-        let actionButton = UIButton(frame: closeButtonFrame)
+        let actionButton = UIButton(frame: actionButtonFrame)
         if let customImageName = options.customOptionsImageName,
             let image = UIImage(named: customImageName) {
             closeButton.setImage(image, for: UIControl.State())
@@ -498,11 +498,20 @@ open class CollieGallery: UIViewController, UIScrollViewDelegate, CollieGalleryV
     }
     
     fileprivate func getCloseButtonFrame(_ avaiableSize: CGSize) -> CGRect {
-        return CGRect(x: 0, y: 0, width: 50, height: 50)
+        if #available(iOS 11.0, *) {
+            return CGRect(x: 0, y: CollieGallery.safeAreaInsets.top, width: 50, height: 50)
+        } else {
+            // Fallback on earlier versions
+            return CGRect(x: 0, y: 0, width: 50, height: 50)
+        }
     }
     
     fileprivate func getActionButtonFrame(_ avaiableSize: CGSize) -> CGRect {
-        return CGRect(x: avaiableSize.width - 50, y: 0, width: 50, height: 50)
+        if #available(iOS 11.0, *) {
+            return CGRect(x: avaiableSize.width - 50, y: CollieGallery.safeAreaInsets.top, width: 50, height: 50)
+        } else {
+            return CGRect(x: avaiableSize.width - 50, y: 0, width: 50, height: 50)
+        }
     }
     
     fileprivate func getCustomButtonFrame(_ avaiableSize: CGSize, forIndex index: Int) -> CGRect {
@@ -675,5 +684,17 @@ open class CollieGallery: UIViewController, UIScrollViewDelegate, CollieGalleryV
         transitioningDelegate = transitionManager
         
         sourceViewController.present(self, animated: type.animated, completion: nil)
+    }
+    
+    static var safeAreaInsets: UIEdgeInsets {
+        if #available(iOS 11.0, tvOS 11.0, *) {
+            if let safeAreaInsets = UIApplication.shared.delegate?.window??.safeAreaInsets {
+                return safeAreaInsets
+            } else if let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets {
+                return safeAreaInsets
+            }
+        }
+    
+        return UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
     }
 }
