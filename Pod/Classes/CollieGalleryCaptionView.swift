@@ -56,6 +56,7 @@ open class CollieGalleryCaptionView: UIView {
         titleLabel.textColor = UIColor.white
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.isUserInteractionEnabled = false
+        titleLabel.textAlignment = .center
         
         addSubview(titleLabel)
         
@@ -66,6 +67,7 @@ open class CollieGalleryCaptionView: UIView {
         captionLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
         captionLabel.translatesAutoresizingMaskIntoConstraints = false
         captionLabel.isUserInteractionEnabled = false
+        captionLabel.textAlignment = .center
         
         addSubview(captionLabel)
         
@@ -111,7 +113,7 @@ open class CollieGalleryCaptionView: UIView {
                                    animations: { [weak self] in
                                         guard let this = self else { return }
                                         this.frame = CGRect(x: this.frame.origin.x,
-                                                                y: screenSize.height - contentSize,
+                                                            y: screenSize.height - contentSize - CollieGallery.safeAreaInsets.bottom,
                                                                 width: screenSize.width,
                                                                 height: contentSize);
         }) { _ in}

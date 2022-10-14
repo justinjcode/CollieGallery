@@ -486,7 +486,7 @@ open class CollieGallery: UIViewController, UIScrollViewDelegate, CollieGalleryV
     }
     
     fileprivate func getCaptionViewFrame(_ availableSize: CGSize) -> CGRect {
-        return CGRect(x: 0.0, y: availableSize.height - 70, width: availableSize.width, height: 70)
+        return CGRect(x: 0.0, y: availableSize.height - CollieGallery.safeAreaInsets.bottom - 70, width: availableSize.width, height: 70)
     }
     
     fileprivate func getProgressViewFrame(_ avaiableSize: CGSize) -> CGRect {
