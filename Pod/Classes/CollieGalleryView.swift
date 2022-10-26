@@ -246,6 +246,15 @@ internal class CollieGalleryView: UIView, UIScrollViewDelegate {
                         print("loadImage failed url:\(url)")
                     }
                 })
+            } else if let loadImageAction = picture.loadImageAction {
+                DispatchQueue.global().async {[weak self] in
+                    let image = loadImageAction()
+                    DispatchQueue.main.async(execute: {
+                        self?.imageView.image = image
+                        self?.updateImageViewSize()
+                        self?.activityIndicator.stopAnimating()
+                    })
+                }
             }
         }
     }

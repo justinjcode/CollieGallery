@@ -32,7 +32,7 @@ open class CollieGalleryPicture: NSObject {
     internal var placeholder: UIImage?
     internal var title: String?
     internal var caption: String?
-    
+    public var loadImageAction: (()->(UIImage?))?
     
     // MARK: - Initializers
     
@@ -51,6 +51,7 @@ open class CollieGalleryPicture: NSObject {
         self.image = image
         self.title = title
         self.caption = caption
+        self.loadImageAction = loadImageAction
     }
     
     /**
@@ -68,6 +69,13 @@ open class CollieGalleryPicture: NSObject {
         self.init()
         self.url = url
         self.placeholder = placeholder
+        self.title = title
+        self.caption = caption
+    }
+    
+    public convenience init(title: String? = nil, caption: String? = nil, loadImageAction: @escaping (()->(UIImage?))) {
+        self.init()
+        self.loadImageAction = loadImageAction
         self.title = title
         self.caption = caption
     }
