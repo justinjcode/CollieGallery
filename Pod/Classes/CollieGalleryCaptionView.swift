@@ -14,10 +14,29 @@ open class CollieGalleryCaptionView: UIView {
     fileprivate var isExpanded = false
     
     /// The title label
-    var titleLabel: UILabel!
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
+        titleLabel.textColor = UIColor.white
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.isUserInteractionEnabled = false
+        titleLabel.textAlignment = .center
+        return titleLabel
+    }()
+    
     
     /// The caption label
-    var captionLabel: UILabel!
+    lazy var captionLabel: UILabel = {
+        let captionLabel = UILabel()
+        captionLabel.font = UIFont(name: "HelveticaNeue", size: 13)
+        captionLabel.textColor = UIColor.gray
+        captionLabel.numberOfLines = 1
+        captionLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        captionLabel.translatesAutoresizingMaskIntoConstraints = false
+        captionLabel.isUserInteractionEnabled = false
+        captionLabel.textAlignment = .center
+        return captionLabel
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,7 +44,7 @@ open class CollieGalleryCaptionView: UIView {
         setupGestures()
         setupView()
     }
-
+    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -51,26 +70,10 @@ open class CollieGalleryCaptionView: UIView {
     fileprivate func setupView() {
         backgroundColor = UIColor(white: 0.0, alpha: 0.7)
         
-        titleLabel = UILabel()
-        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
-        titleLabel.textColor = UIColor.white
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.isUserInteractionEnabled = false
-        titleLabel.textAlignment = .center
-        
         addSubview(titleLabel)
-        
-        captionLabel = UILabel()
-        captionLabel.font = UIFont(name: "HelveticaNeue", size: 13)
-        captionLabel.textColor = UIColor.gray
-        captionLabel.numberOfLines = 1
-        captionLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
-        captionLabel.translatesAutoresizingMaskIntoConstraints = false
-        captionLabel.isUserInteractionEnabled = false
-        captionLabel.textAlignment = .center
-        
         addSubview(captionLabel)
-        
+        self.layer.cornerRadius = 8
+        self.layer.masksToBounds = true
         addLayoutConstraints()
     }
     
@@ -107,15 +110,16 @@ open class CollieGalleryCaptionView: UIView {
         captionLabel.sizeToFit()
         let screenSize = UIScreen.main.bounds.size
         let contentSize: CGFloat = titleLabel.frame.size.height
-                                        + captionLabel.frame.size.height + 30.0
-        UIView.animate(withDuration: 0.5, delay: 0.0,
+        + captionLabel.frame.size.height + 30.0
+        UIView.animate(withDuration: 0.2, delay: 0.0,
                        options: UIView.AnimationOptions(),
-                                   animations: { [weak self] in
-                                        guard let this = self else { return }
-                                        this.frame = CGRect(x: this.frame.origin.x,
-                                                            y: screenSize.height - contentSize - CollieGallery.safeAreaInsets.bottom,
-                                                                width: screenSize.width,
-                                                                height: contentSize);
+                       animations: { [weak self] in
+            guard let this = self else { return }
+            let width: CGFloat = 80
+            this.frame = CGRect(x: screenSize.width/2.0 - width/2.0,
+                                y: screenSize.height - contentSize - CollieGallery.safeAreaInsets.bottom,
+                                width: width,
+                                height: contentSize);
         }) { _ in}
     }
 }

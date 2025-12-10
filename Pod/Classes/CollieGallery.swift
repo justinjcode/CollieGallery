@@ -384,11 +384,11 @@ open class CollieGallery: UIViewController, UIScrollViewDelegate, CollieGalleryV
             let previousIndex = index - i
             let nextIndex = index + i
             
-            if previousIndex >= 0 {
+            if previousIndex >= 0, previousIndex < pictureViews.count {
                 pictureViews[previousIndex].loadImage()
             }
             
-            if nextIndex < pictureViews.count {
+            if nextIndex >= 0, nextIndex < pictureViews.count {
                 pictureViews[nextIndex].loadImage()
             }
         }
@@ -486,7 +486,7 @@ open class CollieGallery: UIViewController, UIScrollViewDelegate, CollieGalleryV
     }
     
     fileprivate func getCaptionViewFrame(_ availableSize: CGSize) -> CGRect {
-        return CGRect(x: 0.0, y: availableSize.height - CollieGallery.safeAreaInsets.bottom - 70, width: availableSize.width, height: 70)
+        return CGRect(x: self.view.bounds.width/2.0 - 40, y: availableSize.height - CollieGallery.safeAreaInsets.bottom - 50, width: 80, height: 50)
     }
     
     fileprivate func getProgressViewFrame(_ avaiableSize: CGSize) -> CGRect {
